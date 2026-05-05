@@ -77,11 +77,11 @@ public class CharacterLocomotion : MonoBehaviour
     void MoveCharacter(float deltaTime)
     {
         if (isJumping)
-        { // IsInAir state
+        { 
             UpdateInAir(deltaTime);
         }
         else
-        { // IsGrounded state
+        { 
             UpdateOnGround();
         }
     }

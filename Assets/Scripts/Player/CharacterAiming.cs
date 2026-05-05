@@ -185,7 +185,7 @@ public class CharacterAiming : MonoBehaviour
             Gizmos.DrawWireSphere(targetPos, 0.2f); // центр цели
 
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(cameraPos, 0.1f); // точка отсчёта камеры
+            Gizmos.DrawWireSphere(cameraPos, 0.1f); // точка отсчета камеры
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(cameraPos, targetPos); // вектор прицеливания
