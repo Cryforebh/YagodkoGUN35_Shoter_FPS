@@ -22592,6 +22592,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1005508916, guid: 4f84cd36964775749a024e440ff91bef, type: 3}
+      propertyPath: _debagGod
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1005508951, guid: 4f84cd36964775749a024e440ff91bef, type: 3}
       propertyPath: allEnemies
       value: 
