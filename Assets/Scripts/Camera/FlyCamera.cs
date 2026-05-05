@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 
-public class FlyCamera : MonoBehaviour {
-
+public class FlyCamera : MonoBehaviour
+{
     public float mouseSensitivity = 1.8f;
     public float movementSpeed = 10f;
     public float acceleratedSpeed = 50f;
 
-    private void Start() {
+    private void Start()
+    {
         enabled = false;
     }
 
-    private void SetCursorState() {
+    private void SetCursorState()
+    {
         // Hide cursor while locked, holding the right mouse button down
         bool locked = Input.GetMouseButton(1);
         Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !locked;
     }
 
-    private void Update() {
+    private void Update()
+    {
 
         SetCursorState();
 
@@ -47,7 +50,8 @@ public class FlyCamera : MonoBehaviour {
         transform.position += deltaPosition * currentSpeed /** Time.deltaTime*/;
 
         // Rotate camera by holding right mouse
-        if (Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(1))
+        {
             // Pitch
             transform.rotation *= Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * mouseSensitivity,
                 Vector3.right

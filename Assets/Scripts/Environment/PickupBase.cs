@@ -11,12 +11,14 @@ public class PickupBase : MonoBehaviour
     protected Collider _collider;
     protected MeshRenderer _meshRenderer;
     protected MeshRenderer[] _meshes;
+    protected Light _light;
 
     private void Start()
     {
         _sound = GetComponent<SoundPickup>();
         _collider = GetComponent<Collider>();
         _meshRenderer = GetComponent<MeshRenderer>();
+        _light = GetComponentInChildren<Light>();
         _meshes = GetComponentsInChildren<MeshRenderer>();
     }
 
@@ -25,6 +27,7 @@ public class PickupBase : MonoBehaviour
         _isEquip = !isEnable;
         _collider.enabled = isEnable;
         _meshRenderer.enabled = isEnable;
+        _light.enabled = isEnable;
         foreach (var obj in _meshes) obj.enabled = isEnable;
         _sound.PlaySound();
     }

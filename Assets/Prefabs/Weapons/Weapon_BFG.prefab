@@ -432,11 +432,12 @@ MonoBehaviour:
   holsterSocket: 0
   layerMask:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 19457
   debug: 0
   isFiring: 0
   animator: {fileID: 9100000, guid: 23dc8b15a581bd2408428f91f54c93a2, type: 2}
   damage: 5
+  speedAimRotate: 1
   raycastOrigin: {fileID: 5121350558847278068}
   fireRate: 30
   bulletSpeed: 1000
@@ -445,6 +446,7 @@ MonoBehaviour:
   ammoCount: 100
   clipSize: 100
   clipCount: 2
+  sound: {fileID: 0}
   muzzleFlash:
   - {fileID: 5477422986284175297}
   - {fileID: 1175591096446303953}
@@ -452,7 +454,6 @@ MonoBehaviour:
   tracerEffect: {fileID: 1296856523995080041, guid: 970b90705161e0d468bbbb889a435127,
     type: 3}
   recoil: {fileID: 0}
-  sound: {fileID: 0}
   magazine: {fileID: 4009531460808703477}
 --- !u!114 &-9170932072026105468
 MonoBehaviour:
@@ -471,6 +472,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   recoilPattern:
   - {x: 0, y: 0}
+  nameRecoil: default
   duration: 0.1
   recoilModifier: 1
 --- !u!114 &6990701928515675744

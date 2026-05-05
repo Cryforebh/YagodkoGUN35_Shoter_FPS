@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class MeleeDamageTrigger : MonoBehaviour
@@ -25,8 +23,7 @@ public class MeleeDamageTrigger : MonoBehaviour
 
                 if (weapon.debug)
                 {
-                    if (hitBox.hitBoxID == HitBoxId.Head) Debug.LogWarning("HeadShot");
-                    Debug.Log($"Enter: {hitBox.gameObject.name}");
+                    if (hitBox.hitBoxID == HitBoxId.Head) Debug.Log("HeadShot");
                 }
             }
         }
@@ -52,9 +49,4 @@ public class MeleeDamageTrigger : MonoBehaviour
         if (weapon.debug)
             Debug.DrawRay(weapon.transform.position, weapon.transform.up, Color.red);
     }
-
-            //if (weapon.isOneTargetToHit)
-            //    if (_isReset == true)
-            //        return;
-
 }

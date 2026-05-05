@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,8 +13,10 @@ public class AiSensor : MonoBehaviour
     public int scanFrequency = 30;
     public LayerMask layers;
     public LayerMask occlusionLayers;
-    public List<GameObject> Objects {
-        get {
+    public List<GameObject> Objects
+    {
+        get
+        {
             objects.RemoveAll(obj => !obj);
             return objects;
         }
@@ -39,50 +39,60 @@ public class AiSensor : MonoBehaviour
     void Update()
     {
         scanTimer -= Time.deltaTime;
-        if (scanTimer < 0) {
+        if (scanTimer < 0)
+        {
             scanTimer += scanInterval;
             Scan();
         }
     }
 
-    private void Scan() {
+    private void Scan()
+    {
         count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
 
         objects.Clear();
-        for (int i = 0; i <count; ++i) {
+        for (int i = 0; i < count; ++i)
+        {
             GameObject obj = colliders[i].gameObject;
-            if (obj == gameObject) {
+            if (obj == gameObject)
+            {
                 continue;
             }
 
-            if (IsInSight(obj)) {
+            if (IsInSight(obj))
+            {
                 objects.Add(obj);
             }
         }
     }
 
-    public bool IsInSight(GameObject obj) {
+    public bool IsInSight(GameObject obj)
+    {
 
         Vector3 origin = transform.position;
         Vector3 dest = obj.transform.position;
         Vector3 direction = dest - origin;
-        if (direction.y > height || direction.y < -0.01f) {
+        if (direction.y > height || direction.y < -0.01f)
+        {
             return false;
         }
 
         direction.y = 0;
-        if (direction.sqrMagnitude > distanceSq) {
+        if (direction.sqrMagnitude > distanceSq)
+        {
             return false;
         }
 
         float deltaAngle = Vector3.Angle(direction, transform.forward);
-        if (deltaAngle > angle) {
+        if (deltaAngle > angle)
+        {
             return false;
         }
 
         origin.y += height / 2;
         dest.y = origin.y;
-        if (Physics.Linecast(origin, dest, occlusionLayers)) {
+        if (Physics.Linecast(origin, dest, occlusionLayers))
+        {
             return false;
         }
 
@@ -91,7 +101,8 @@ public class AiSensor : MonoBehaviour
 
     /*============= Õ¿◊¿ÀŒ –¿¡Œ“€ Œ“Œ¡–¿∆≈Õ»ﬂ — ¿Õ¿ =============*/
 
-    Mesh CreateWedgeMesh() {
+    Mesh CreateWedgeMesh()
+    {
         Mesh mesh = new Mesh();
 
         int segments = 10;
@@ -131,8 +142,9 @@ public class AiSensor : MonoBehaviour
 
         float currentAngle = -angle;
         float deltaAngle = (angle * 2) / segments;
-        for(int i = 0; i < segments; ++i) {
-            
+        for (int i = 0; i < segments; ++i)
+        {
+
             bottomLeft = Quaternion.Euler(0, currentAngle, 0) * Vector3.forward * distance;
             bottomRight = Quaternion.Euler(0, currentAngle + deltaAngle, 0) * Vector3.forward * distance;
 
@@ -161,7 +173,8 @@ public class AiSensor : MonoBehaviour
             currentAngle += deltaAngle;
         }
 
-        for(int i = 0; i < numVertices; ++i) {
+        for (int i = 0; i < numVertices; ++i)
+        {
             triangles[i] = i;
         }
 
@@ -172,18 +185,22 @@ public class AiSensor : MonoBehaviour
         return mesh;
     }
 
-    private void OnValidate() {
+    private void OnValidate()
+    {
         mesh = CreateWedgeMesh();
         scanInterval = 1.0f / scanFrequency;
         distanceSq = distance * distance;
     }
 
-    private void OnDrawGizmos() {
-        if (!debug) {
+    private void OnDrawGizmos()
+    {
+        if (!debug)
+        {
             return;
         }
 
-        if (mesh) {
+        if (mesh)
+        {
             Gizmos.color = meshColor;
             Gizmos.DrawMesh(mesh, transform.position, transform.rotation);
         }
@@ -207,7 +224,7 @@ public class AiSensor : MonoBehaviour
         Gizmos.DrawLine(p + bottomLeft, p + topLeft);
         Gizmos.DrawLine(p + topLeft, p + topCenter);
         Gizmos.DrawLine(p + topCenter, p + bottomCenter);
-        
+
         Gizmos.DrawLine(p + bottomCenter, p + bottomRight);
         Gizmos.DrawLine(p + bottomRight, p + topRight);
         Gizmos.DrawLine(p + topRight, p + topCenter);
@@ -215,7 +232,8 @@ public class AiSensor : MonoBehaviour
         int segments = 10;
         float currentAngle = -angle;
         float deltaAngle = (angle * 2) / segments;
-        for(int i = 0; i < segments; ++i) {
+        for (int i = 0; i < segments; ++i)
+        {
 
             bottomLeft = Quaternion.Euler(0, currentAngle, 0) * transform.rotation * Vector3.forward * distance;
             bottomRight = Quaternion.Euler(0, currentAngle + deltaAngle, 0) * transform.rotation * Vector3.forward * distance;
@@ -230,12 +248,14 @@ public class AiSensor : MonoBehaviour
         }
 
         Gizmos.color = Color.green;
-        if (debugTargets) {
-            foreach (var obj in Objects) {
+        if (debugTargets)
+        {
+            foreach (var obj in Objects)
+            {
                 Gizmos.DrawSphere(obj.transform.position, 0.2f);
             }
         }
-        
+
 
         bottomCenter = Vector3.zero;
         bottomLeft = Quaternion.Euler(0, -angle, 0) * transform.rotation * Vector3.forward * distance;
@@ -248,19 +268,24 @@ public class AiSensor : MonoBehaviour
 
     /*=============  ŒÕ≈÷ –¿¡Œ“€ Œ“Œ¡–¿∆≈Õ»ﬂ — ¿Õ¿ =============*/
 
-    public int Filter(GameObject[] buffer, string layerName, string tagName = null) {
+    public int Filter(GameObject[] buffer, string layerName, string tagName = null)
+    {
         int layer = LayerMask.NameToLayer(layerName);
         int count = 0;
-        foreach (var obj in Objects) {
-            if (tagName != null && !obj.CompareTag(tagName)) {
+        foreach (var obj in Objects)
+        {
+            if (tagName != null && !obj.CompareTag(tagName))
+            {
                 continue;
             }
 
-            if (obj.layer == layer) {
+            if (obj.layer == layer)
+            {
                 buffer[count++] = obj;
             }
 
-            if (buffer.Length == count) {
+            if (buffer.Length == count)
+            {
                 break; // buffer is full
             }
         }

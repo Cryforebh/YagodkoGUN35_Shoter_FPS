@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIHealthBar : MonoBehaviour
@@ -20,7 +18,8 @@ public class UIHealthBar : MonoBehaviour
         transform.position = Camera.main.WorldToScreenPoint(target.position + offset);
     }
 
-    public void SetHealthBarPercentage(float percentage) {
+    public void SetHealthBarPercentage(float percentage)
+    {
         float parentWidth = GetComponent<RectTransform>().rect.width;
         float width = parentWidth * percentage;
         foregroundImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);

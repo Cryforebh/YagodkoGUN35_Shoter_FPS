@@ -14,6 +14,8 @@ public class ActiveWeapon : MonoBehaviour
     public Animator rigController;
     public Transform[] weaponSlots;
     public bool isChangingWeapon;
+    public AllAgents allEnemies;
+    public LayerMask obstacleLayerForAutoAim;
 
     WeaponBase[] equipped_weapons = new WeaponBase[3];
     CharacterAiming characterAiming;
@@ -23,6 +25,7 @@ public class ActiveWeapon : MonoBehaviour
 
     int activeWeaponIndex = -1;
     bool isHolstered = false;
+    bool isAutoAim = false;
     private float _timeNextRigStage = 0.05f;
     private WeaponBase _oldWeapon;
 
@@ -36,7 +39,6 @@ public class ActiveWeapon : MonoBehaviour
         reload = GetComponent<ReloadWeapon>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
@@ -75,13 +77,50 @@ public class ActiveWeapon : MonoBehaviour
         return equipped_weapons[index];
     }
 
-    // Update is called once per frame
     void Update()
     {
         var weapon = GetWeapon(activeWeaponIndex);
+
+        UpdateInputFiring(weapon);
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            ToggleActiveWeapon();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SetActiveWeapon(WeaponSlot.Primary);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SetActiveWeapon(WeaponSlot.Secondary);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SetActiveWeapon(WeaponSlot.Melee);
+        }
+    }
+
+    void UpdateInputFiring(WeaponBase weapon)
+    {
         bool notSprinting = rigController.GetCurrentAnimatorStateInfo(2).shortNameHash == Animator.StringToHash("not_sprinting");
         bool canFire = !isHolstered && notSprinting && !reload.isReloading;
-        if (weapon)
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            isAutoAim = !isAutoAim;
+            Debug.Log("AutoAim: " + isAutoAim);
+            if (!isAutoAim)
+            {
+                if (weapon is MeleeWeapon weaponMW)
+                    weaponMW.StopFiring();
+                else
+                    weapon.StopFiring();
+            }
+        }
+
+        if (weapon && !isAutoAim)
         {
             if (weapon is MeleeWeapon weaponMW)
             {
@@ -116,23 +155,88 @@ public class ActiveWeapon : MonoBehaviour
 
             weapon.UpdateWeapon(Time.deltaTime, crossHairTarget.position);
         }
-
-        if (Input.GetKeyDown(KeyCode.X))
+        else
         {
-            ToggleActiveWeapon();
+            characterAiming.SetRotationLock(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        UpdateAutoAim(weapon);
+    }
+
+    void UpdateAutoAim(WeaponBase weapon)
+    {
+        if (!isAutoAim)
         {
-            SetActiveWeapon(WeaponSlot.Primary);
+            characterAiming.SetAutoAimTarget(null); // Отключаем автоприцеливание
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (allEnemies == null) return;
+
+        var enemies = allEnemies.GetAllAgent();
+        if (enemies.Length <= 0)
         {
-            SetActiveWeapon(WeaponSlot.Secondary);
+            characterAiming.SetAutoAimTarget(null);
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+
+        float minDistance = float.MaxValue;
+        float maxDistance = 15f;
+        AiAgent target = null;
+
+        foreach (var enemy in enemies)
         {
-            SetActiveWeapon(WeaponSlot.Melee);
+            if (enemy.stateMachine.currentState == AiStateId.Death)
+                continue;
+
+            var distance = Vector3.Distance(transform.position, enemy.navMeshAgent.nextPosition);
+            if (distance < minDistance)
+            {
+                target = enemy;
+                minDistance = distance;
+            }
+        }
+
+        if (target != null && weapon != null)
+        {
+            Vector3 playerPosition = transform.position + Vector3.up;
+            var direction = (playerPosition - target.transform.position + Vector3.up * target.navMeshAgent.radius).normalized;
+            Ray ray = new Ray(playerPosition, direction);
+
+            if (Physics.Raycast(ray, minDistance, obstacleLayerForAutoAim, QueryTriggerInteraction.Ignore))
+            {
+                characterAiming.SetAutoAimTarget(null);
+                if (weapon is RaycastWeapon raycastWeapon)
+                    weapon.StopFiring();
+            }
+            else
+            {
+                bool isMaxDistance = Vector3.Distance(transform.position, target.transform.position) > maxDistance;
+                characterAiming.SetAutoAimTarget(target.navMeshAgent.transform);
+
+                if (weapon is MeleeWeapon weaponMW)
+                {
+                    if (weaponMW.CanAttack())
+                    {
+                        rigController.SetTrigger("reload_weapon");
+                    }
+
+                    weaponMW.StartFiring();
+
+                    if (weaponMW.IsStopAttack())
+                    {
+                        rigController.SetBool("reload_weapon", false);
+                    }
+                }
+                else
+                {
+                    weapon.StartFiring();
+                }
+                weapon.UpdateWeapon(Time.deltaTime, crossHairTarget.position);
+            }
+        }
+        else
+        {
+            characterAiming.SetAutoAimTarget(null);
         }
     }
 
@@ -175,7 +279,7 @@ public class ActiveWeapon : MonoBehaviour
         int holsterIndex = activeWeaponIndex;
         int activateIndex = (int)weaponSlot;
 
-        if (/*holsterIndex == activateIndex ||*/ isChangingWeapon)
+        if (isChangingWeapon)
         {
             return;
         }
@@ -229,7 +333,6 @@ public class ActiveWeapon : MonoBehaviour
             rigController.SetBool("holster_weapon", false);
             rigController.Play("weapon_" + weapon.weaponName + "_equip");
             weapon.PlaySoundEquip(); // Sound Equip
-            //Debug.Log("weapon_" + weapon.weaponName + "_equip");
             do
             {
                 yield return new WaitForSeconds(_timeNextRigStage);

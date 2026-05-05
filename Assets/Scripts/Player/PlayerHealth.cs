@@ -28,7 +28,7 @@ public class PlayerHealth : Health
         direction.y = 1.0f;
         ragdoll.ApplyForce(direction * dieForce);
         weapons.DropWeapon();
-        aiming.SetRotationLock(true);
+        aiming.SetFullRotationLock(true);
         aiming.enabled = false;
         cameraManager.EnableKillCam();
     }

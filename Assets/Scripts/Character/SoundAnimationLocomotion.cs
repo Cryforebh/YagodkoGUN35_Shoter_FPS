@@ -88,31 +88,4 @@ public class SoundAnimationLocomotion : MonoBehaviour
         _sourceBody.clip = _deadSound;
         _sourceBody.Play();
     }
-
-    private void PlayingSetup(AudioSource source, AudioClip[] audioClips)
-    {
-
-        if (!source)
-        {
-            Debug.LogWarning("Звук не установлен!");
-            return;
-        }
-        if (source.isPlaying)
-            source.Stop();
-        var index = IndexSetup(audioClips);
-        if (index < 0) return;
-        source.clip = audioClips[index];
-        source.Play();
-    }
-
-    private int IndexSetup(AudioClip[] audioClips)
-    {
-        if (audioClips.Length > 0)
-            return Random.Range(0, audioClips.Length);
-        else
-        {
-            Debug.LogError("Звуков не найдено!");
-            return -1;
-        }
-    }
 }

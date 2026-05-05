@@ -1,10 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AiMemory {
-    public float Age {
-        get {
+public class AiMemory
+{
+    public float Age
+    {
+        get
+        {
             return Time.time - lastSeen;
         }
     }
@@ -22,19 +24,23 @@ public class AiSensoryMemory
     public List<AiMemory> memories = new List<AiMemory>();
     GameObject[] characters;
 
-    public AiSensoryMemory(int maxPlayers) {
+    public AiSensoryMemory(int maxPlayers)
+    {
         characters = new GameObject[maxPlayers];
     }
 
-    public void UpdateSenses(AiSensor sensor) {
+    public void UpdateSenses(AiSensor sensor)
+    {
         int targets = sensor.Filter(characters, "Character");
-        for (int i = 0; i < targets; ++i) {
+        for (int i = 0; i < targets; ++i)
+        {
             GameObject target = characters[i];
             RefreshMemory(sensor.gameObject, target);
         }
     }
 
-    public void RefreshMemory(GameObject agent, GameObject target) {
+    public void RefreshMemory(GameObject agent, GameObject target)
+    {
         AiMemory memory = FetchMemory(target);
         memory.gameObject = target;
         memory.position = target.transform.position;
@@ -44,16 +50,19 @@ public class AiSensoryMemory
         memory.lastSeen = Time.time;
     }
 
-    public AiMemory FetchMemory(GameObject gameObject) {
+    public AiMemory FetchMemory(GameObject gameObject)
+    {
         AiMemory memory = memories.Find(x => x.gameObject == gameObject);
-        if (memory == null) {
+        if (memory == null)
+        {
             memory = new AiMemory();
             memories.Add(memory);
         }
         return memory;
     }
 
-    public void ForgetMemories(float olderThan) {
+    public void ForgetMemories(float olderThan)
+    {
         memories.RemoveAll(m => m.Age > olderThan);
         memories.RemoveAll(m => !m.gameObject);
         memories.RemoveAll(m => m.gameObject.GetComponent<Health>().IsDead());

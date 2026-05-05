@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -11,32 +9,42 @@ public class AiTargetingSystem : MonoBehaviour
     public float angleWeight = 1.0f;
     public float ageWeight = 1.0f;
 
-    public bool HasTarget {
-        get {
+    public bool HasTarget
+    {
+        get
+        {
             return bestMemory != null;
         }
     }
 
-    public GameObject Target {
-        get {
+    public GameObject Target
+    {
+        get
+        {
             return bestMemory.gameObject;
         }
     }
 
-    public Vector3 TargetPosition {
-        get {
+    public Vector3 TargetPosition
+    {
+        get
+        {
             return bestMemory.gameObject.transform.position;
         }
     }
 
-    public bool TargetInSight {
-        get {
+    public bool TargetInSight
+    {
+        get
+        {
             return bestMemory.Age < 0.5f; //seconds
         }
     }
 
-    public float TargetDistance {
-        get {
+    public float TargetDistance
+    {
+        get
+        {
             return bestMemory.distance;
         }
     }
@@ -60,39 +68,49 @@ public class AiTargetingSystem : MonoBehaviour
         EvaluateScores();
     }
 
-    void EvaluateScores() {
+    void EvaluateScores()
+    {
         bestMemory = null;
 
-        foreach (var memory in memory.memories) {
+        foreach (var memory in memory.memories)
+        {
             memory.score = CalculateScore(memory);
             if (bestMemory == null ||
-                memory.score > bestMemory.score) {
+                memory.score > bestMemory.score)
+            {
                 bestMemory = memory;
             }
         }
     }
 
-    float Normalize(float value, float maxValue) {
+    float Normalize(float value, float maxValue)
+    {
         return 1.0f - (value / maxValue);
     }
 
-    float CalculateScore(AiMemory memory) {
+    float CalculateScore(AiMemory memory)
+    {
         float distanceScore = Normalize(memory.distance, sensor.distance) * distanceWeight;
         float angleScore = Normalize(memory.angle, sensor.angle) * angleWeight;
         float ageScore = Normalize(memory.Age, memorySpan) * ageWeight;
         return distanceScore + angleScore + ageScore;
     }
 
-    private void OnDrawGizmos() {
-        if (debug) {
+    private void OnDrawGizmos()
+    {
+        if (debug)
+        {
             float maxScore = float.MinValue;
-            foreach (var memory in memory.memories) {
+            foreach (var memory in memory.memories)
+            {
                 maxScore = Mathf.Max(maxScore, memory.score);
             }
 
-            foreach (var memory in memory.memories) {
+            foreach (var memory in memory.memories)
+            {
                 Color color = Color.red;
-                if (memory == bestMemory) {
+                if (memory == bestMemory)
+                {
                     color = Color.yellow;
                 }
                 color.a = memory.score / maxScore;

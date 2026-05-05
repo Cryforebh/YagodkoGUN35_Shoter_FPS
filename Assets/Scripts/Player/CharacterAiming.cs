@@ -22,6 +22,13 @@ public class CharacterAiming : MonoBehaviour
     private Animator _animator;
     private int _isAimingParam = Animator.StringToHash("isAiming");
 
+    private Transform _autoAimTarget;
+    private Vector3 _autoAimCameraPoint;
+    private bool _isAutoAiming = false;
+    private float _autoAimSmoothTime = 0.05f;
+    private float _autoAimYawVelocity;
+    private float _autoAimPitchVelocity;
+
     private void Start()
     {
         Cursor.visible = false;
@@ -36,26 +43,92 @@ public class CharacterAiming : MonoBehaviour
         if (isRotationLock)
             return;
 
-        isAiming = Input.GetMouseButton(1);
-        _animator.SetBool(_isAimingParam, isAiming);
-
-        WeaponBase weaponBase = _activeWeapon.GetActiveWeapon();
-
-        if (weaponBase)
-            _currentSpeedAimRotation = isAiming ? weaponBase.speedAimRotate * _speedAimRotation : _speedAimRotation;
-
-        if (weaponBase is RaycastWeapon weapon)
+        if (_isAutoAiming && _autoAimTarget != null)
         {
-            weapon.recoil.recoilModifier = isAiming ? 0.3f : 1.0f;
+            HandleAutoAimRotation();
         }
+        else
+        {
+            isAiming = Input.GetMouseButton(1);
+            _animator.SetBool(_isAimingParam, isAiming);
 
-        CalculateRotationInput();
+            WeaponBase weaponBase = _activeWeapon.GetActiveWeapon();
+
+            if (weaponBase)
+                _currentSpeedAimRotation = isAiming ? weaponBase.speedAimRotate * _speedAimRotation : _speedAimRotation;
+
+            if (weaponBase is RaycastWeapon weapon)
+            {
+                weapon.recoil.recoilModifier = isAiming ? 0.3f : 1.0f;
+            }
+
+            CalculateRotationInput();
+        }
         CameraRotation();
+    }
+
+
+    private Vector3 GetAimTargetPosition()
+    {
+        return _autoAimTarget.position + Vector3.up * 1f;
+    }
+
+    private Vector3 GetCameraAimPoint()
+    {
+        return cameraLookAt.position + cameraLookAt.right * 0.5f;;
+    }
+
+    private void HandleAutoAimRotation()
+    {
+        Vector3 targetPosition = GetAimTargetPosition();
+        Vector3 cameraAimPoint = GetCameraAimPoint();
+
+        Vector3 directionToTarget = (targetPosition - cameraAimPoint).normalized;
+
+        if (directionToTarget == Vector3.zero)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        Vector3 targetEuler = targetRotation.eulerAngles;
+
+        float targetYaw = targetEuler.y;
+        float targetPitch = targetEuler.x;
+
+        targetPitch = ClampAngle(targetPitch, _cameraBottomClamp, _cameraTopClamp);
+
+        // Плавный поворот по горизонтали (yaw)
+        _cinemachineTargetYaw = Mathf.SmoothDampAngle(
+            _cinemachineTargetYaw,
+            targetYaw,
+            ref _autoAimYawVelocity,
+            _autoAimSmoothTime 
+        );
+
+        // Плавный поворот по вертикали (pitch)
+        _cinemachineTargetPitch = Mathf.SmoothDampAngle(
+            _cinemachineTargetPitch,
+            targetPitch,
+            ref _autoAimPitchVelocity,
+            _autoAimSmoothTime * 0.1f
+        );
+    }
+
+    public void SetAutoAimTarget(Transform target)
+    {
+        if (target == null)
+        {
+            _autoAimTarget = null;
+            _isAutoAiming = false;
+        }
+        else
+        {
+            _autoAimTarget = target;
+            _isAutoAiming = true;
+        }
     }
 
     private void CameraRotation()
     {
-        // clamp our rotations so our values are limited 360 degrees
         _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _cameraBottomClamp, _cameraTopClamp);
 
@@ -64,7 +137,6 @@ public class CharacterAiming : MonoBehaviour
         euler.y = _cinemachineTargetYaw;
         transform.eulerAngles = euler;
 
-        // Cinemachine will follow this target
         cameraLookAt.rotation = Quaternion.Euler(_cinemachineTargetPitch + _cameraAngleOverride,
             _cinemachineTargetYaw, 0.0f);
     }
@@ -93,10 +165,31 @@ public class CharacterAiming : MonoBehaviour
     public void AddCinemachineTargetYaw(float targetYaw) => _cinemachineTargetYaw += targetYaw;
     public void AddCinemachineTargetPitch(float targetPitch) => _cinemachineTargetPitch -= targetPitch;
 
-    public void SetRotationLock(bool isLock)
+    public void SetFullRotationLock(bool isLock)
     {
         isRotationLock = isLock;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void SetRotationLock(bool isLock) => isRotationLock = isLock;
+
+
+    void OnDrawGizmos()
+    {
+        if (_autoAimTarget != null)
+        {
+            Vector3 targetPos = GetAimTargetPosition();
+            Vector3 cameraPos = GetCameraAimPoint();
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(targetPos, 0.2f); // центр цели
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(cameraPos, 0.1f); // точка отсчёта камеры
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(cameraPos, targetPos); // вектор прицеливания
+        }
     }
 }

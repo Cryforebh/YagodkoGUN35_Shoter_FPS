@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Не используеться !!!
 public class AiKnife : MonoBehaviour
 {
     private Transform m_currentTarget;

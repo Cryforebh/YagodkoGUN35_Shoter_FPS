@@ -53,7 +53,6 @@ public class ReloadWeapon : MonoBehaviour
 
     void OnWeaponAnimationEvent(string eventName)
     {
-        Debug.Log("OnAnimationEvent:" + eventName);
         switch (eventName)
         {
             case "detach_magazine":

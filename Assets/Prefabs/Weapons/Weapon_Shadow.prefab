@@ -2396,7 +2396,7 @@ MonoBehaviour:
   holsterSocket: 0
   layerMask:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 19457
   debug: 0
   isFiring: 0
   animator: {fileID: 9100000, guid: 23dc8b15a581bd2408428f91f54c93a2, type: 2}
@@ -2410,6 +2410,7 @@ MonoBehaviour:
   ammoCount: 45
   clipSize: 45
   clipCount: 2
+  sound: {fileID: 0}
   muzzleFlash:
   - {fileID: 2740811723292781720}
   - {fileID: 8816481599011659144}
@@ -2417,7 +2418,6 @@ MonoBehaviour:
   tracerEffect: {fileID: 1296856523995080041, guid: 88feff48dedac0e43ac1169adfba7235,
     type: 3}
   recoil: {fileID: 0}
-  sound: {fileID: 0}
   magazine: {fileID: 4926740985929566116}
 --- !u!114 &-9170932072026105468
 MonoBehaviour:
@@ -2451,6 +2451,7 @@ MonoBehaviour:
   - {x: 2, y: 10}
   - {x: 5, y: 10}
   - {x: 7, y: 10}
+  nameRecoil: default
   duration: 0.1
   recoilModifier: 1
 --- !u!114 &6990701928515675744
@@ -2639,7 +2640,7 @@ PrefabInstance:
     - target: {fileID: 3565449121790620844, guid: 7c1244a8569ff7e40ae3c715a65ac10e,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3565539015872694006, guid: 7c1244a8569ff7e40ae3c715a65ac10e,
         type: 3}
@@ -2714,7 +2715,7 @@ PrefabInstance:
     - target: {fileID: 3727539344259540618, guid: 7c1244a8569ff7e40ae3c715a65ac10e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3727554810773609098, guid: 7c1244a8569ff7e40ae3c715a65ac10e,
         type: 3}

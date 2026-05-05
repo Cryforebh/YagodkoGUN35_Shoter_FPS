@@ -432,7 +432,7 @@ MonoBehaviour:
   holsterSocket: 1
   layerMask:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 19457
   debug: 0
   isFiring: 0
   animator: {fileID: 22100000, guid: 59bb25011bd5ad149abb5599a43b5aa7, type: 2}
@@ -575,6 +575,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4546467886544403635}
     m_Modifications:
+    - target: {fileID: 1079572264633099706, guid: f0e3cc0ac219bb74f88206b3ef0ad3ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3565449121790620844, guid: f0e3cc0ac219bb74f88206b3ef0ad3ce,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -649,6 +654,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3727539344259540618, guid: f0e3cc0ac219bb74f88206b3ef0ad3ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3727554810773609098, guid: f0e3cc0ac219bb74f88206b3ef0ad3ce,
         type: 3}

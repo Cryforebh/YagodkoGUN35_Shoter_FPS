@@ -152,7 +152,7 @@ public class AiWeapons : MonoBehaviour
         else
         {
             weapons[(int)weapon.weaponSlot] = weapon;
-                sockets.Attach(weapon.transform, weapon.holsterSocket);
+            sockets.Attach(weapon.transform, weapon.holsterSocket);
             StartCoroutine(SwitchWeaponAnimation((int)weapon.weaponSlot));
         }
     }
@@ -236,7 +236,7 @@ public class AiWeapons : MonoBehaviour
         if (currentWeapon is MeleeWeapon weaponMW)
         {
             weaponMW.ResetAttack();
-        }   
+        }
     }
 
     IEnumerator EquipWeaponAnimation()
@@ -374,7 +374,7 @@ public class AiWeapons : MonoBehaviour
 
     void DropMagazine()
     {
-        GameObject droppedMagazine = Instantiate(magazineHand, magazineHand.transform.position, magazineHand.transform.rotation);   
+        GameObject droppedMagazine = Instantiate(magazineHand, magazineHand.transform.position, magazineHand.transform.rotation);
         droppedMagazine.SetActive(true);
         Rigidbody body = droppedMagazine.AddComponent<Rigidbody>();
 

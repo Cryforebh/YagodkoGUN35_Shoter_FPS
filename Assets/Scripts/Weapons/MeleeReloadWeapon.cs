@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Не используется!
 public class MeleeReloadWeapon : MonoBehaviour
 {
 

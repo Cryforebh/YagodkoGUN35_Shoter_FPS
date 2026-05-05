@@ -44,9 +44,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.009498768, b: 0, a: 1}
-  m_Intensity: 2
-  m_Range: 10
+  m_Color: {r: 0, g: 0.9181824, b: 1, a: 1}
+  m_Intensity: 0.4
+  m_Range: 3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -82,7 +82,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 24119
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb261848e0edf82418e02204cf496b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeRespawn: 60
   weaponBase: {fileID: 8899489235086708132, guid: 2531ebe4670a39c4d96bafa1bb5457c2,
     type: 3}
 --- !u!114 &1562230966913767615
@@ -429,6 +430,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7199800650197264877}
     m_Modifications:
+    - target: {fileID: -9045260966700959051, guid: 86240a35972175640b8d2ac76d359f60,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 86240a35972175640b8d2ac76d359f60,
         type: 3}
       propertyPath: m_RootOrder
@@ -493,6 +499,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: weapon_pistol
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 86240a35972175640b8d2ac76d359f60,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1187291833445755018, guid: 86240a35972175640b8d2ac76d359f60,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6835238448874410226, guid: 86240a35972175640b8d2ac76d359f60,
         type: 3}

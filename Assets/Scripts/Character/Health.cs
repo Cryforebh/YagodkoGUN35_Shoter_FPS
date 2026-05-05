@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Health : MonoBehaviour
 {
@@ -12,14 +9,13 @@ public class Health : MonoBehaviour
 
     SkinnedMeshRenderer skinnedMeshRenderer;
     UIHealthBar healthBar;
-    
+
     public float blinkIntensity = 10;
 
 
     public float blinkDuration = 0.05f;
     float blinkTimer;
 
-    // Start is called before the first frame update
     void Start()
     {
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -27,14 +23,16 @@ public class Health : MonoBehaviour
 
         var rigidBodies = GetComponentsInChildren<Rigidbody>();
         HitBox hitBox;
-        foreach (var rigidBody in rigidBodies) {
+        foreach (var rigidBody in rigidBodies)
+        {
             if (rigidBody.gameObject == gameObject)
                 continue; // переход к следующей итерации
 
             hitBox = rigidBody.gameObject.GetComponent<HitBox>();
             if (hitBox == null) hitBox = rigidBody.gameObject.AddComponent<HitBox>();
             hitBox.health = this;
-            if (hitBox.gameObject != gameObject) {
+            if (hitBox.gameObject != gameObject)
+            {
                 hitBox.gameObject.layer = LayerMask.NameToLayer("Hitbox");
             }
         }
@@ -42,64 +40,77 @@ public class Health : MonoBehaviour
         OnStart();
     }
 
-    public void Heal(float amount) {
+    public void Heal(float amount)
+    {
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
 
-        if (healthBar) {
+        if (healthBar)
+        {
             healthBar.SetHealthBarPercentage(currentHealth / maxHealth);
         }
         OnHeal(amount);
-        
+
         blinkTimer = blinkDuration;
     }
 
-    public void TakeDamage(float amount, Vector3 direction) {
+    public void TakeDamage(float amount, Vector3 direction)
+    {
         if (!_debagGod)
             currentHealth -= amount;
-        if (healthBar) {
+        if (healthBar)
+        {
             healthBar.SetHealthBarPercentage(currentHealth / maxHealth);
         }
         OnDamage(direction);
-        if (currentHealth <= 0.0f) {
+        if (currentHealth <= 0.0f)
+        {
             Die(direction);
         }
 
         blinkTimer = blinkDuration;
     }
 
-    public bool IsDead() {
+    public bool IsDead()
+    {
         return currentHealth <= 0;
     }
 
-    public bool IsLowHealth() {
+    public bool IsLowHealth()
+    {
         return currentHealth < lowHealth;
     }
 
-    private void Die(Vector3 direction) {
+    private void Die(Vector3 direction)
+    {
         OnDeath(direction);
     }
 
-    private void Update() {
+    private void Update()
+    {
         blinkTimer -= Time.deltaTime;
         float lerp = Mathf.Clamp01(blinkTimer / blinkDuration);
         float intensity = (lerp * blinkIntensity) + 1.0f;
         skinnedMeshRenderer.material.color = Color.white * intensity;
     }
 
-    protected virtual void OnStart() {
+    protected virtual void OnStart()
+    {
 
     }
 
-    protected virtual void OnDeath(Vector3 direction) {
+    protected virtual void OnDeath(Vector3 direction)
+    {
 
     }
 
-    protected virtual void OnDamage(Vector3 direction) {
+    protected virtual void OnDamage(Vector3 direction)
+    {
 
     }
 
-    protected virtual void OnHeal(float amount) {
+    protected virtual void OnHeal(float amount)
+    {
 
     }
 }

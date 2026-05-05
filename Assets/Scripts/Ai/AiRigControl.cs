@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -19,19 +17,16 @@ public class AiRigControl : MonoBehaviour
         if (_target == null || _rig == null) return;
 
         _rig.weight = _currentWeightRig = _startWeightRig;
-        //_currentTargetLookPosition = _targetStartLookPosition = _target.transform.position + transform.position;
     }
 
     private void Update()
     {
         if (_target == null || _rig == null) return;
-        
+
         _rig.weight = _currentWeightRig;
 
         if (_isLook)
             _target.transform.position = _currentTargetLookPosition;
-        //else
-            //_target.transform.localPosition = transform.forward + transform.up * 1.5f;
     }
 
     public void SetWeight(float weight) => _currentWeightRig = weight;

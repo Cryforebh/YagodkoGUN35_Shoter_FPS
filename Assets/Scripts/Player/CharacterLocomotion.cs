@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharacterLocomotion : MonoBehaviour
 {
@@ -28,7 +25,6 @@ public class CharacterLocomotion : MonoBehaviour
 
     int isSprintingParam = Animator.StringToHash("isSprinting");
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -39,7 +35,6 @@ public class CharacterLocomotion : MonoBehaviour
         characterAiming = GetComponent<CharacterAiming>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         input.x = Input.GetAxis("Horizontal");
@@ -49,13 +44,15 @@ public class CharacterLocomotion : MonoBehaviour
         animator.SetFloat("InputY", input.y);
 
         UpdateIsSprinting();
- 
-        if (Input.GetKeyDown(KeyCode.Space)) {
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             Jump();
         }
     }
 
-    bool IsSprinting() {
+    bool IsSprinting()
+    {
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
         bool isFiring = activeWeapon.IsAttack();
         bool isReloading = reloadWeapon.isReloading;
@@ -64,39 +61,48 @@ public class CharacterLocomotion : MonoBehaviour
         return isSprinting && !isFiring && !isReloading && !isChangingWeapon && !isAiming;
     }
 
-    private void UpdateIsSprinting() {
+    private void UpdateIsSprinting()
+    {
         bool isSprinting = IsSprinting();
         animator.SetBool(isSprintingParam, isSprinting);
         rigController.SetBool(isSprintingParam, isSprinting);
     }
 
-    private void OnAnimatorMove() {
+    private void OnAnimatorMove()
+    {
         rootMotion += animator.deltaPosition;
         MoveCharacter(Time.deltaTime);
     }
 
-    void MoveCharacter(float deltaTime) {
-        if (isJumping) { // IsInAir state
+    void MoveCharacter(float deltaTime)
+    {
+        if (isJumping)
+        { // IsInAir state
             UpdateInAir(deltaTime);
-        } else { // IsGrounded state
+        }
+        else
+        { // IsGrounded state
             UpdateOnGround();
         }
     }
 
-    private void UpdateOnGround() {
+    private void UpdateOnGround()
+    {
         Vector3 stepForwardAmount = rootMotion * groundSpeed;
         Vector3 stepDownAmount = Vector3.down * stepDown;
 
         cc.Move(stepForwardAmount + stepDownAmount);
         rootMotion = Vector3.zero;
 
-        if (!cc.isGrounded) {
+        if (!cc.isGrounded)
+        {
             cc.Move(-stepDownAmount);
             SetInAir(0);
         }
     }
 
-    private void UpdateInAir(float deltaTime) {
+    private void UpdateInAir(float deltaTime)
+    {
         velocity.y -= gravity * deltaTime;
         Vector3 displacement = velocity * deltaTime;
         displacement += CalculateAirControl();
@@ -104,15 +110,18 @@ public class CharacterLocomotion : MonoBehaviour
         isJumping = !cc.isGrounded;
         rootMotion = Vector3.zero;
         animator.SetBool("isJumping", isJumping);
-        if (!isJumping && sound) sound.PlaySoundJumpEnd(); 
+        if (!isJumping && sound) sound.PlaySoundJumpEnd();
     }
 
-    Vector3 CalculateAirControl() {
+    Vector3 CalculateAirControl()
+    {
         return ((transform.forward * input.y) + (transform.right * input.x)) * (airControl / 100);
     }
 
-    void Jump() {
-        if (!isJumping) {
+    void Jump()
+    {
+        if (!isJumping)
+        {
             float jumpVelocity = Mathf.Sqrt(2 * gravity * jumpHeight);
             SetInAir(jumpVelocity);
             if (sound)
@@ -120,14 +129,16 @@ public class CharacterLocomotion : MonoBehaviour
         }
     }
 
-    private void SetInAir(float jumpVelocity) {
+    private void SetInAir(float jumpVelocity)
+    {
         isJumping = true;
         velocity = animator.velocity * jumpDamp * groundSpeed;
         velocity.y = jumpVelocity;
         animator.SetBool("isJumping", true);
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit) {
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // no rigidbody

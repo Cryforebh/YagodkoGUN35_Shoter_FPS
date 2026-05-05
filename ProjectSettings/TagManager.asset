@@ -20,16 +20,16 @@ TagManager:
   - Pickup
   - Character
   - Hitbox
-  - 
+  - Door
   - Bullet
   - 
+  - Box
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - MapElement
   - 
   - 
   - 

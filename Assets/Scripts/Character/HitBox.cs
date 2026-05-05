@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum HitBoxId
 {
@@ -13,7 +11,7 @@ public class HitBox : MonoBehaviour
     public HitBoxId hitBoxID = HitBoxId.None;
     public Health health;
 
-    public void OnRaycastHit(WeaponBase weapon, Vector3 direction) 
+    public void OnRaycastHit(WeaponBase weapon, Vector3 direction)
     {
         if (hitBoxID == HitBoxId.Head)
         {
@@ -22,9 +20,4 @@ public class HitBox : MonoBehaviour
         else
             health.TakeDamage(weapon.damage, direction);
     }
-
-    //public void OnRaycastHitMelee(MeleeWeapon meleeWeapon)
-    //{
-    //    health.TakeDamage
-    //}
 }

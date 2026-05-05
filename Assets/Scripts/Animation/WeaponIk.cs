@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class HumanBone {
+public class HumanBone
+{
     public HumanBodyBones bone;
     public float weight = 1.0f;
 }
@@ -25,28 +24,31 @@ public class WeaponIk : MonoBehaviour
     public HumanBone[] humanBones;
     Transform[] boneTransforms;
 
-    // Start is called before the first frame update
     void Start()
     {
         Animator animator = GetComponent<Animator>();
         boneTransforms = new Transform[humanBones.Length];
-        for (int i = 0; i < boneTransforms.Length; i++) {
+        for (int i = 0; i < boneTransforms.Length; i++)
+        {
             boneTransforms[i] = animator.GetBoneTransform(humanBones[i].bone);
         }
     }
 
-    Vector3 GetTargetPosition() {
+    Vector3 GetTargetPosition()
+    {
         Vector3 targetDirection = (targetTransform.position + targetOffset) - aimTransform.position;
         Vector3 aimDirection = aimTransform.forward;
         float blendOut = 0.0f;
 
         float targetAngle = Vector3.Angle(targetDirection, aimDirection);
-        if (targetAngle > angleLimit) {
+        if (targetAngle > angleLimit)
+        {
             blendOut += (targetAngle - angleLimit) / 50.0f;
         }
 
         float targetDistance = targetDirection.magnitude;
-        if (targetDistance < distanceLimit) {
+        if (targetDistance < distanceLimit)
+        {
             blendOut += distanceLimit - targetDistance;
         }
 
@@ -54,11 +56,11 @@ public class WeaponIk : MonoBehaviour
         return aimTransform.position + direction;
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
         if (aimTransform == null ||
-            targetTransform == null) {
+            targetTransform == null)
+        {
             weight = 0.0f;
             return;
         }
@@ -67,8 +69,10 @@ public class WeaponIk : MonoBehaviour
         weight = Mathf.Clamp01(weight);
 
         Vector3 targetPosition = GetTargetPosition();
-        for (int i = 0; i < iterations; i++) {
-            for (int b = 0; b < boneTransforms.Length; b++) {
+        for (int i = 0; i < iterations; i++)
+        {
+            for (int b = 0; b < boneTransforms.Length; b++)
+            {
                 Transform bone = boneTransforms[b];
                 float boneWeight = humanBones[b].weight * weight;
                 AimAtTarget(bone, targetPosition, boneWeight);
@@ -76,7 +80,8 @@ public class WeaponIk : MonoBehaviour
         }
     }
 
-    private void AimAtTarget(Transform bone, Vector3 targetPosition, float weight) {
+    private void AimAtTarget(Transform bone, Vector3 targetPosition, float weight)
+    {
         Vector3 aimDirection = aimTransform.forward;
         Vector3 targetDirection = targetPosition - aimTransform.position;
         Quaternion aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
@@ -84,11 +89,13 @@ public class WeaponIk : MonoBehaviour
         bone.rotation = blendedRotation * bone.rotation;
     }
 
-    public void SetTargetTransform(Transform target) {
+    public void SetTargetTransform(Transform target)
+    {
         targetTransform = target;
     }
 
-    public void SetAimTransform(Transform aim) {
+    public void SetAimTransform(Transform aim)
+    {
         aimTransform = aim;
     }
 }
