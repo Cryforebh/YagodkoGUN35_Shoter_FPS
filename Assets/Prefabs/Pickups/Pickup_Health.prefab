@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeRespawn: 60
-  amount: 50
+  amount: 100
 --- !u!114 &5030421448848330950
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9384,7 +9384,7 @@ MonoBehaviour:
   _debagGod: 1
   maxHealth: 200
   currentHealth: 200
-  lowHealth: 50
+  lowHealth: 100
   blinkIntensity: 10
   blinkDuration: 0.05
   dieForce: 15
