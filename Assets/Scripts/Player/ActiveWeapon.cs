@@ -165,7 +165,7 @@ public class ActiveWeapon : MonoBehaviour
 
     void UpdateAutoAim(WeaponBase weapon)
     {
-        if (!isAutoAim)
+        if (!isAutoAim || !weapon)
         {
             characterAiming.SetAutoAimTarget(null); // Отключаем автоприцеливание
             return;
