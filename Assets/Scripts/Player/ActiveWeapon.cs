@@ -188,7 +188,7 @@ public class ActiveWeapon : MonoBehaviour
             if (enemy.stateMachine.currentState == AiStateId.Death)
                 continue;
 
-            var distance = Vector3.Distance(transform.position, enemy.navMeshAgent.nextPosition);
+            var distance = Vector3.Distance(weapon.transform.position, enemy.transform.position + Vector3.up * enemy.navMeshAgent.radius);
             if (distance < minDistance)
             {
                 target = enemy;
@@ -198,9 +198,12 @@ public class ActiveWeapon : MonoBehaviour
 
         if (target != null && weapon != null)
         {
-            Vector3 playerPosition = transform.position + Vector3.up;
-            var direction = (playerPosition - target.transform.position + Vector3.up * target.navMeshAgent.radius).normalized;
+            Vector3 playerPosition = weapon.transform.position;
+            Vector3 agent = target.transform.position + Vector3.up * target.navMeshAgent.radius;
+            var direction = (agent - playerPosition).normalized;
             Ray ray = new Ray(playerPosition, direction);
+
+            Debug.DrawRay(playerPosition, direction, Color.cyan);
 
             if (Physics.Raycast(ray, minDistance, obstacleLayerForAutoAim, QueryTriggerInteraction.Ignore))
             {

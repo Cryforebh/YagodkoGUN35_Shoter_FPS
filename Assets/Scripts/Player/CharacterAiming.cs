@@ -23,7 +23,6 @@ public class CharacterAiming : MonoBehaviour
     private int _isAimingParam = Animator.StringToHash("isAiming");
 
     private Transform _autoAimTarget;
-    private Vector3 _autoAimCameraPoint;
     private bool _isAutoAiming = false;
     private float _autoAimSmoothTime = 0.05f;
     private float _autoAimYawVelocity;

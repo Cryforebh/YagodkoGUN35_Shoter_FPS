@@ -96,8 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 33c1fa41ad027c4498465aec06f45988,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_LightingSettings: {fileID: 97807860}
 --- !u!196 &4
 NavMeshSettings:
@@ -3656,6 +3655,7 @@ Transform:
   - {fileID: 2025420967}
   - {fileID: 998384424}
   - {fileID: 21486610}
+  - {fileID: 573430666}
   m_Father: {fileID: 2087514539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &328874021
@@ -9606,12 +9606,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1634273967}
+    m_TransformParent: {fileID: 325848210}
     m_Modifications:
     - target: {fileID: 8312407600016623986, guid: f770abe2fc1848444ba1c3e06964a647,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.23
+      value: 14.899999
       objectReference: {fileID: 0}
     - target: {fileID: 8312407600016623986, guid: f770abe2fc1848444ba1c3e06964a647,
         type: 3}
@@ -9621,7 +9621,7 @@ PrefabInstance:
     - target: {fileID: 8312407600016623986, guid: f770abe2fc1848444ba1c3e06964a647,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.84
+      value: 65.09999
       objectReference: {fileID: 0}
     - target: {fileID: 8312407600016623986, guid: f770abe2fc1848444ba1c3e06964a647,
         type: 3}
@@ -17189,7 +17189,6 @@ Transform:
   - {fileID: 1733053541}
   - {fileID: 255136874}
   - {fileID: 1773938996}
-  - {fileID: 573430666}
   - {fileID: 394339204}
   - {fileID: 1580151075}
   m_Father: {fileID: 536732315}
