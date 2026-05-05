@@ -53,7 +53,7 @@ public class WeaponSound : MonoBehaviour
 
         if (!source)
         {
-            Debug.LogWarning("Звук не установлен!");
+            //Debug.LogWarning("Звук не установлен!");
             return;
         }
         if (source.isPlaying)
